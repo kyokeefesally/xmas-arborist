@@ -6,14 +6,16 @@ import eventlet
 from flask import Flask, render_template, url_for, copy_current_request_context, session, request
 from flask_socketio import SocketIO, emit, send
 
-#import RPi.GPIO as GPIO  
-#GPIO.setmode(GPIO.BCM) 
+'''
+import RPi.GPIO as GPIO  
+GPIO.setmode(GPIO.BCM) 
+'''
 
 # Start with a basic flask app
 app = Flask(__name__)
 
 # Flask configs
-#app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 
 # Extra files to monitor for reloader
@@ -21,6 +23,9 @@ extra_files = ['static/js/app.js', 'templates/index.html',]
 
 #turn the flask app into a socketio app
 socketio = SocketIO(app, debug=True, engineio_options={'logger': True}, engineio_logger=True)
+
+low_water = ''
+water_full = ''
 
 '''
 # GPIO 12 & 16 set up as inputs
@@ -55,8 +60,8 @@ def low_water_callback(channel):  # GPIO 12
         #emit_low_water_value()
         #web_pull('hey')
         #socketio.emit('test', broadcast=True)
-        #socketio.emit('low_water', {'low_water': low_water}, broadcast=True, namespace='/web')
-        socketio.emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True)
+        socketio.emit('low_water', {'low_water': low_water}, broadcast=True, namespace='/web')
+        #socketio.emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True, namespace='/web')
 
         print("RISING: low_water == False code here (" + str(GPIO.input(12)) + ")")
 
@@ -64,8 +69,8 @@ def low_water_callback(channel):  # GPIO 12
         low_water = True
 
         #emit_low_water_value()
-        #socketio.emit('low_water', {'low_water': low_water}, broadcast=True, namespace='/web')
-        socketio.emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True)
+        socketio.emit('low_water', {'low_water': low_water}, broadcast=True, namespace='/web')
+        #socketio.emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True, namespace='/web')
 
         print("FALLING: low_water == True code here (" + str(GPIO.input(12)) + ")")
   
@@ -124,44 +129,66 @@ def index():
     #only by sending this page first will the client be connected to the socketio instance
     return render_template('index.html')
 
-'''
+
 #####################################################################
 #  Events when server comes online (no namespace)
 #####################################################################
-@socketio.on('connect')
+@socketio.on('connect', namespace='/gpio')
 def on_connect():
     print("Client Connected")
-'''
+
 
 #####################################################################
 #  Events when web clients connect to server (namespace='/web')
 #####################################################################
-@socketio.on('connect')
+@socketio.on('connect', namespace='/web')
 def web_connect():
     print('Web Client Connected')
 
-'''
-@socketio.on('web_pull')
+
+@socketio.on('web_pull', namespace='/web')
 def web_pull(message):
     global low_water, water_full
+    emit('pull_tree_update', broadcast=True, namespace='/gpio')
     
     print(message)
-
+'''
     if low_water == '' or water_full == '':
         get_water_levels()
-        emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True)
+        emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True, namespace='/web')
 
     else:
-        emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True)
-        emit('low_water', {'low_water': low_water}, broadcast=True)
-        emit('water_full', {'water_full': water_full}, broadcast=True)
+        emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True, namespace='/web')
+        #emit('low_water', {'low_water': low_water}, broadcast=True)
+        #emit('water_full', {'water_full': water_full}, broadcast=True)
 '''
 
-@socketio.on('test')
-def test(message):
-    print("TEST SUCCESSFUL!!!!!!!!")
+@socketio.on('tree_update', namespace='/gpio')
+def tree_update(message):
+    global low_water, water_full
+
+    low_water = message['low_water']
+    water_full = message['water_full']
+
+    emit('tree_update', {'low_water': low_water, 'water_full': water_full}, broadcast=True, namespace='/web')
 
 
+@socketio.on('low_water', namespace='/gpio')
+def tree_update(message):
+    global low_water
+
+    low_water = message['low_water']
+
+    emit('low_water', {'low_water': low_water}, broadcast=True, namespace='/web')
+
+
+@socketio.on('water_full', namespace='/gpio')
+def tree_update(message):
+    global water_full
+
+    water_full = message['water_full']
+
+    emit('water_full', {'water_full': water_full}, broadcast=True, namespace='/web')
 
 if __name__ == '__main__':
     #socketio.run(app, host='0.0.0.0', use_reloader=True, debug=True, extra_files=['static/js/app.js', 'templates/index.html',], port=5000)
