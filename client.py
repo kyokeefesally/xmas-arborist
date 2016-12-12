@@ -11,7 +11,13 @@ GPIO.setmode(GPIO.BCM)
 logging.getLogger('requests').setLevel(logging.WARNING)
 logging.basicConfig(level=logging.DEBUG)
 
-SOCKETIO = SocketIO('xmas-arborist', 3000)
+class GpioNamespace(BaseNamespace):
+
+    def on_aaa_response(self, *args):
+        print('on_aaa_response', args)
+
+SOCKETIO = SocketIO('10.0.1.81', 3000)
+GPIO_NAMESPACE = SOCKETIO.define(GpioNamespace, '/gpio')
 
 # GPIO 12 & 16 set up as inputs
 GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # low_water sensor
@@ -24,7 +30,7 @@ def send_tree_update(*message):
     if low_water == '' or water_full == '':
         get_water_levels()
     else:
-        SOCKETIO.emit('tree_update', {'low_water': low_water, 'water_full': water_full})
+        GPIO_NAMESPACE.emit('tree_update', {'low_water': low_water, 'water_full': water_full})
 
 def get_water_levels():
     global low_water, water_full
@@ -49,14 +55,14 @@ def low_water_callback(channel):  # GPIO 12
         # set low_water bool
         low_water = False
 
-        SOCKETIO.emit('low_water', {'low_water': low_water})
+        GPIO_NAMESPACE.emit('low_water', {'low_water': low_water})
 
         print("RISING: low_water == False code here (" + str(GPIO.input(12)) + ")")
 
     elif GPIO.input(12) == 0:
         low_water = True
 
-        SOCKETIO.emit('low_water', {'low_water': low_water})
+        GPIO_NAMESPACE.emit('low_water', {'low_water': low_water})
 
         print("FALLING: low_water == True code here (" + str(GPIO.input(12)) + ")")
   
@@ -67,14 +73,14 @@ def water_full_callback(channel):  # GPIO 16
     if GPIO.input(16) == 1:
         water_full = False
 
-        SOCKETIO.emit('water_full', {'water_full': water_full})
+        GPIO_NAMESPACE.emit('water_full', {'water_full': water_full})
 
         print("RISING: water_full == False code here (" + str(GPIO.input(16)) + ")")
 
     elif GPIO.input(16) == 0:  # code here when water is full
         water_full = True
 
-        SOCKETIO.emit('water_full', {'water_full': water_full})
+        GPIO_NAMESPACE.emit('water_full', {'water_full': water_full})
 
         print("FALLING: water_full == True code here (" + str(GPIO.input(16)) + ")")
 
@@ -91,9 +97,9 @@ def emit_low_water_value():
 
     if low_water == '':
         get_water_levels()
-        socketio.emit('low_water', {'low_water': low_water})
+        GPIO_NAMESPACE.emit('low_water', {'low_water': low_water})
     else:
-        socketio.emit('low_water', {'low_water': low_water})
+        GPIO_NAMESPACE.emit('low_water', {'low_water': low_water})
 
 
 def emit_water_full_value():
@@ -101,15 +107,15 @@ def emit_water_full_value():
 
     if water_full == '':
         get_water_levels()
-        socketio.emit('water_full', {'water_full': water_full})
+        GPIO_NAMESPACE.emit('water_full', {'water_full': water_full})
     else:
-        socketio.emit('water_full', {'water_full': water_full})
+        GPIO_NAMESPACE.emit('water_full', {'water_full': water_full})
 
 def create_socket(persistent):
     global SOCKETIO, USB_NAMESPACE, DATA
 
     if persistent:
-        SOCKETIO.on('server_pull_tree_update', send_tree_update)
+        GPIO_NAMESPACE.on('pull_tree_update', send_tree_update)
         SOCKETIO.wait()
 
     else:
