@@ -15,13 +15,8 @@ $(document).ready(function(){
     */
     
     socketio.on('connect', function() {
-        socketio.emit('web_pull', {web_message: 'hey'});
+        //socketio.emit('web_pull', {web_message: 'hey'});
         console.log("I'm connected");
-    });
-
-    socketio.on('connect_callback', function(msg) {
-        server_message = msg.message
-        console.log(server_message);
     });
 
     socketio.on('low_water', function(msg) {

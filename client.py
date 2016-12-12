@@ -29,6 +29,7 @@ water_full = ''
 def send_tree_update(*message):
     if low_water == '' or water_full == '':
         get_water_levels()
+        GPIO_NAMESPACE.emit('tree_update', {'low_water': low_water, 'water_full': water_full})
     else:
         GPIO_NAMESPACE.emit('tree_update', {'low_water': low_water, 'water_full': water_full})
 
