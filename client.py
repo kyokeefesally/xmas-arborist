@@ -27,6 +27,7 @@ low_water = ''
 water_full = ''
 
 def send_tree_update(*message):
+    global low_water, water_full
     if low_water == '' or water_full == '':
         get_water_levels()
         GPIO_NAMESPACE.emit('tree_update', {'low_water': low_water, 'water_full': water_full})
@@ -62,6 +63,7 @@ def low_water_callback(channel):  # GPIO 12
 
     elif GPIO.input(12) == 0:
         low_water = True
+        start_pump()
 
         GPIO_NAMESPACE.emit('low_water', {'low_water': low_water})
 
@@ -80,6 +82,7 @@ def water_full_callback(channel):  # GPIO 16
 
     elif GPIO.input(16) == 0:  # code here when water is full
         water_full = True
+        stop_pump()
 
         GPIO_NAMESPACE.emit('water_full', {'water_full': water_full})
 
@@ -92,6 +95,13 @@ GPIO.add_event_detect(12, GPIO.BOTH, callback=low_water_callback, bouncetime=300
 # falling edge detection on water_full pin 16
 GPIO.add_event_detect(16, GPIO.BOTH, callback=water_full_callback, bouncetime=300)
 
+def start_pump():
+    print("code here")
+    pump_on = True
+    
+def stop_pump():
+    print("code here")
+    pump_on = False
 
 def emit_low_water_value():
     global low_water
