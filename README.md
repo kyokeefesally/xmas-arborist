@@ -2,9 +2,16 @@
 A Raspberry Pi based Christmas tree watering and lighting control system with Flask Socket-IO web dashboard
 ## Getting Started
 ```bash
-# Update
+# Update/Upgrade
 $ sudo apt-get update
 $ sudo apt-get upgrade
+
+# Install rmate
+$ git clone https://github.com/kyokeefesally/rmatey
+$ sudo bash rmatey/rmatey
+
+# Clean Up rmatey
+$ sudo rm -R rmatey
 
 # Install Pip
 $ sudo apt-get install python-pip
