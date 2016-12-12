@@ -1,7 +1,7 @@
 $(document).ready(function(){
     //connect to the socket server.
 
-    var socketio = io.connect('http://' + document.domain + ':' + location.port);
+    var socketio = io.connect('http://' + document.domain + ':' + location.port + '/web');
     
     /*
     var socketio = io.connect('http://' + document.domain + ':' + location.port + '/web', {
@@ -25,18 +25,18 @@ $(document).ready(function(){
     });
 
     socketio.on('low_water', function(msg) {
-        //low_water_value = msg.low_water
-        //console.log(msg);
+        low_water_value = msg.low_water
+        console.log(msg);
     });
 
     socketio.on('water_full', function(msg) {
-        //water_full_value = msg.water_full
-        //console.log(msg);
+        water_full_value = msg.water_full
+        console.log(msg);
     });
 
     socketio.on('tree_update', function(msg) {
-        //low_water_value = msg.low_water
-        //water_full_value = msg.water_full
+        low_water_value = msg.low_water
+        water_full_value = msg.water_full
         console.log(msg)
     });
 
