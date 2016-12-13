@@ -33,9 +33,20 @@ $ sudo apt-get -y install python-dev python-rpi.gpio
 
 $ sudo pip install socketIO-client-2
 
-export PYTHONPATH=$HOME/.local/lib/python/site-packages:$PYTHONPATH
-export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
-export PATH=$HOME/.local/bin:$PATH
+$ sudo apt-get remove python-pip
+$ sudo easy_install pip
+
+$ sudo pip install gevent-socketio
+
+$ sudo pip uninstall gevent-socketio
+$ sudo pip install python-socketio  # already installed
+
+$ sudo pip uninstall gevent-websocket gevent python-socketio flask-socketio
+$ sudo pip install flask-socketio
+
+# export PYTHONPATH=$HOME/.local/lib/python/site-packages:$PYTHONPATH
+# export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
+# export PATH=$HOME/.local/bin:$PATH
 
 
 ```
