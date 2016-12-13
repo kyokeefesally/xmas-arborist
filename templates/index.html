@@ -4,9 +4,20 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="static/js/app.js"></script>
+    <script src="static/js/bootstrap-switch.js"></script>
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap-switch.css">
 </head>
 <body>
-    xmas-arborist
+    <div class="jumbotron">
+        <h1>xmas-arborist</h1>
+    </div>
+
+    <div class="container" id="content">
+        <div class="row">
+            <button type="button" id="paired" class="btn btn-primary">UNPAIR USB</button>
+            <input id="light-switch" type="checkbox" name="light-switch" style="display: none;">
+        </div>
+    </div>
 </body>
