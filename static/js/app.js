@@ -2,6 +2,7 @@ $(document).ready(function(){
 
     // initialize bootstrap-switch
     $("[name='light-switch']").bootstrapSwitch();
+    $('.bootstrap-switch-id-light-switch').hide();
 
     //connect to the socket server.
 
@@ -30,7 +31,7 @@ $(document).ready(function(){
         lights_on = msg.lights_on
         console.log(msg)
         $('#light-switch').bootstrapSwitch('state', lights_on); // true || false
-        $('#light-switch').delay(500).show();
+        $('.bootstrap-switch-id-light-switch').show();
     });
 
     socketio.on('low_water', function(msg) {
