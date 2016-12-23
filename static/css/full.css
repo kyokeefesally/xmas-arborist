@@ -1,0 +1,45 @@
+/*
+ * Start Bootstrap - Full (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+body {
+    margin-top: 50px; /* Required margin for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+tt}
+
+/* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
+
+.full {
+    /*
+    background: url('http://fliphtml5.com/examples/christmas-photo-album/files/pageConfig/cute-christmas-wallpaper.jpg') no-repeat center center fixed;
+    background: url('https://www.vectoropenstock.com/media/users/3/126244/raw/82c60ea2c182c694f24124a485a07335-christmas-background-with-santa-sleigh.jpg') no-repeat center center fixed;
+   
+
+   
+    background: url('https://i.ytimg.com/vi/PtFrhHp1Lqk/maxresdefault.jpg') no-repeat center center fixed;
+    background: url('http://www.crestock.com/uploads/blog/wallpapers/xmas08/crestock-1293599-2560x1600.jpg') no-repeat center center fixed;
+    background: url('http://static8.depositphotos.com/1157310/955/v/950/depositphotos_9554767-stock-illustration-christmas-snow-landscape-background.jpg') no-repeat center center fixed;
+    background: url('https://www.welovesolo.com/wp-content/uploads/2014/12/p186achads1t3514dtvu967p6hq5-details.jpg');
+    background: url('https://image.freepik.com/free-vector/christmas-background-with-snowflakes_1048-3460.jpg') no-repeat center center fixed;
+    
+
+    background: url('http://ace.ycdsb.ca/documents/winter/FOV1-0009042C/FOV1-00090431/winter%20snowflake%20background%205%25.png');
+
+    */
+
+
+    background-color: #ff9999;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+
+/*
+    -webkit-background-size: 20%;
+    -moz-background-size: 20%;
+    background-size: 20%;
+    -o-background-size: 20%;
+*/
+
+}
