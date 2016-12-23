@@ -17,7 +17,8 @@ class GpioNamespace(BaseNamespace):
     def on_aaa_response(self, *args):
         print('on_aaa_response', args)
 
-SOCKETIO = SocketIO('10.0.1.81', 3000)
+#SOCKETIO = SocketIO('10.0.1.81', 3000)
+SOCKETIO = SocketIO('http://xmas-arborist.local', 3000)
 GPIO_NAMESPACE = SOCKETIO.define(GpioNamespace, '/gpio')
 
 # GPIO 12 & 16 set up as inputs
